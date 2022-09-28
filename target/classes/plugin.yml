@@ -1,0 +1,14 @@
+name: StopVinesGrowing
+version: 1.3
+main: com.happiergore.stopvinesgrowing.main
+api-version: 1.18
+author: HappierGore
+discord: HappierGore#1197
+prefix: StopVinesGrowing
+website: https://www.spigotmc.org/resources/authors/happiergore.1046101/
+commands:     
+  stopvinesgrowing:
+    description: Stop vines growing main command
+    aliases: [svg]
+
+      

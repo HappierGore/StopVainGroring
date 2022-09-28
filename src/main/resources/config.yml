@@ -1,0 +1,15 @@
+#If you're facing errors, please, enable debug_mode and send me the log in my
+#discord server:
+#https://discord.gg/dVhXcG3JHZ
+Extras:
+    OnApply:
+        Sound: ENTITY_EXPERIENCE_ORB_PICKUP
+        Message: "&aThis vine wont grow up anymore"
+    OnRemove:
+        Sound: ENTITY_EXPERIENCE_BOTTLE_THROW
+        Message: "&cThis vine will grow up"
+    OnBreakRegistered:
+        Sound: ENTITY_FIREWORK_ROCKET_BLAST
+        Message: "&cThis vine has been unregistered"
+        
+debug_mode: false
