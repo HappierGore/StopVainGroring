@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,7 @@ public class main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
 
+        configYML = getConfig();
         console = new ConsoleUtils();
         debugMode = getConfig().getBoolean("debug_mode");
 
@@ -49,8 +51,6 @@ public class main extends JavaPlugin implements Listener {
         setupManager();
 
         registerCommands();
-
-        configYML = getConfig();
 
         //Crear config.yml en caso de que no exista
         saveDefaultConfig();
@@ -77,6 +77,11 @@ public class main extends JavaPlugin implements Listener {
         OnVineGrowing.onBreakVain(e);
     }
 
+    @EventHandler
+    public void OnBlockGrows(BlockGrowEvent e) {
+        OnVineGrowing.onBlockGrowing(e);
+    }
+
     //***********************
     //        Helper
     //***********************
@@ -96,7 +101,12 @@ public class main extends JavaPlugin implements Listener {
         msg.add("&9Server version: &a1." + version);
         msg.add("");
         msg.add("&9Debug mode: &a" + debugMode);
-        msg.add("&9Total vines blocked: &a" + VineJBDC.vineMDownSaved.size());
+        msg.add("&9Total materials blocked: &a" + (VineJBDC.vineMDownSaved.size() + VineJBDC.vineMUpSaved.size()));
+        if (debugMode) {
+            msg.add("&9Materials registered:");
+            msg.add("&9Up: &a" + OnVineGrowing.materialsUP.toString());
+            msg.add("&9Down: &a" + OnVineGrowing.materialsDown.toString());
+        }
         console.loggerMsg(msg);
     }
 
@@ -106,7 +116,7 @@ public class main extends JavaPlugin implements Listener {
             sversion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         } catch (Exception e) {
             console.warnMsg(this.getName() + " wasn't able to get your client version.\nWill start with default version...");
-            sversion = "v1_12";
+            sversion = "v1_19";
         }
         successMessage(sversion);
         return true;

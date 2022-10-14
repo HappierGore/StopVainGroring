@@ -19,13 +19,15 @@ public class VineData implements Serializable {
     protected int y;
     protected int z;
     protected String worldName;
+    protected String material;
 
     //Create data from DB
-    public VineData(Location location) {
+    public VineData(Location location, String material) {
         this.worldName = location.getWorld().getName();
         this.x = location.getBlockX();
         this.y = location.getBlockY();
         this.z = location.getBlockZ();
+        this.material = material;
         if (debugMode) {
             String msg = "World:" + worldName + " X:" + x + " Y:" + y + " Z:" + z;
             console.infoMsg("Creating a VineData object:\n" + msg);
@@ -35,36 +37,8 @@ public class VineData implements Serializable {
     public VineData() {
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
-
-    public String getWorld() {
-        return worldName;
-    }
-
-    public void setWorld(String worldName) {
-        this.worldName = worldName;
+    public String getMaterial() {
+        return this.material;
     }
 
     public Location getLocation() {
@@ -72,16 +46,17 @@ public class VineData implements Serializable {
     }
 
     public void setLocation(Location location) {
-        this.setWorld(location.getWorld().getName());
-        this.setX(location.getBlockX());
-        this.setY(location.getBlockY());
-        this.setZ(location.getBlockZ());
+        worldName = location.getWorld().getName();
+        x = location.getBlockX();
+        y = location.getBlockY();
+        z = location.getBlockZ();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("VainData{x=").append(x);
+        sb.append(", Material=").append(material);
         sb.append(", y=").append(y);
         sb.append(", z=").append(z);
         sb.append(", world=").append(worldName);

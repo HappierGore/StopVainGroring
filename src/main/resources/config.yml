@@ -13,3 +13,21 @@ Extras:
         Message: "&cThis vine has been unregistered"
         
 debug_mode: false
+
+#Configuration for items names for "material_growing" event
+#This version works great on 1.19, but item names may change
+#by mc version, if it's your case, just change the item names
+#according your mc version. To see the material name, just go to google and
+#type: Spigot ${your version} material
+#then, look your item using ctrl + f and use that name.
+
+GrowsUp:
+    - "BAMBOO"
+    - "BAMBOO_SAPLING"
+    - "TWISTING_VINES"
+    - "CACTUS"
+
+GrowsDown:
+    - "CAVE_VINES_PLANT"
+    - "CAVE_VINES"
+    - "VINE"

@@ -14,7 +14,7 @@ import org.bukkit.block.Block;
  *
  * @author HappieGore
  */
-public class ParentMDown extends VineData implements Serializable {
+public class ParentMUp extends VineData implements Serializable {
 
     public final List<ChildM> children = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class ParentMDown extends VineData implements Serializable {
     //serialized value change because of it. With this sentence, this variable won't be serialized.
     transient private final VineData origin;
 
-    public ParentMDown(Location origin, String material) {
+    public ParentMUp(Location origin, String material) {
         this.material = material;
         this.origin = new VineData(origin, material);
         this.findParent();
@@ -32,76 +32,76 @@ public class ParentMDown extends VineData implements Serializable {
         Location actualLocation = origin.getLocation();
 
         if (debugMode) {
-            console.infoMsg("&6We're starting to looking for the parent (Up from origin)");
+            console.infoMsg("&6We're starting to looking for the parent (Down from origin)");
         }
 
         //Finding parent
         while (true) {
-            Block blockUp = Bukkit.getWorld(origin.worldName).getBlockAt(actualLocation);
+            Block blockDown = Bukkit.getWorld(origin.worldName).getBlockAt(actualLocation);
             if (debugMode) {
-                console.infoMsg("Block up found: " + blockUp.toString());
+                console.infoMsg("&eBlock down found: &r\n" + blockDown.toString());
             }
 
-            if (!OnVineGrowing.materialsDown.contains(blockUp.getType().toString().toUpperCase())) {
-                actualLocation.setY(actualLocation.getY() - 1);
+            if (!OnVineGrowing.materialsUP.contains(blockDown.getType().toString().toUpperCase())) {
+                actualLocation.setY(actualLocation.getY() + 1);
                 this.setLocation(actualLocation);
-                children.remove(children.size() - 1);
                 if (debugMode) {
                     console.infoMsg("&aParent found in location: &r" + actualLocation.toString());
-                    console.infoMsg("&6Origin: &r" + origin.getLocation().toString());
-                    console.infoMsg("&6Parent block: &r" + Bukkit.getWorld(worldName).getBlockAt(actualLocation).toString());
+                    console.infoMsg("&eOrigin: &r" + origin.getLocation().toString());
+                    console.infoMsg("&eParent block: &r" + Bukkit.getWorld(worldName).getBlockAt(actualLocation).toString());
                 }
                 break;
             }
 
             if (debugMode) {
-                console.infoMsg("Adding a new child");
+                console.infoMsg("&6Adding a new child");
             }
 
-            children.add(new ChildM(actualLocation, this, null));
+            children.add(new ChildM(actualLocation, this, material));
 
             if (debugMode) {
-                console.infoMsg("Going up to find  the parent");
+                console.infoMsg("&6Going down to find the parent");
             }
-            actualLocation.setY(actualLocation.getY() + 1);
+            actualLocation.setY(actualLocation.getY() - 1);
 
         }
 
         if (debugMode) {
-            console.infoMsg("&6We're starting to looking for more children (Down from origin)");
+            console.infoMsg("&6We're starting to looking for more children (Up from origin)");
         }
 
         //Finding children bellow
         actualLocation = origin.getLocation();
-        actualLocation.setY(actualLocation.getY() - 1);
+        actualLocation.setY(actualLocation.getY() + 1);
 
         while (true) {
             Block blockDown = Bukkit.getWorld(worldName).getBlockAt(actualLocation);
             if (debugMode) {
-                console.infoMsg("Block down found: " + blockDown.toString());
+                console.infoMsg("&6Block up found:&r\n" + blockDown.toString());
             }
-            if (!OnVineGrowing.materialsDown.contains(blockDown.getType().toString().toUpperCase())) {
+            if (!OnVineGrowing.materialsUP.contains(blockDown.getType().toString().toUpperCase())) {
                 if (debugMode) {
-                    console.infoMsg("&6We found somethieng diferent to vine. Ending child filtering.");
-                    console.infoMsg("&6Children found: &r" + children.toString());
+                    console.infoMsg("&6We found something diferent to vine. Ending child filtering.");
+                    console.infoMsg("&aChildren found: &r\n" + children.toString());
                     this.children.sort((o1, o2) -> {
                         return o1.y - o2.y;
                     });
-                    console.infoMsg("&aChildren sorted:" + children.toString());
+                    children.remove(0);
+                    console.infoMsg("&aChildren sorted: &r\n" + children.toString());
                 }
                 break;
             }
 
             if (debugMode) {
-                console.infoMsg("Adding a new child");
+                console.infoMsg("&6Adding a new child");
             }
 
-            children.add(new ChildM(actualLocation, this, null));
+            children.add(new ChildM(actualLocation, this, material));
 
             if (debugMode) {
-                console.infoMsg("Going down to find  the parent");
+                console.infoMsg("&6Going up to find  the parent");
             }
-            actualLocation.setY(actualLocation.getY() - 1);
+            actualLocation.setY(actualLocation.getY() + 1);
 
         }
     }
@@ -109,7 +109,7 @@ public class ParentMDown extends VineData implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ParentMDown{");
+        sb.append("ParentMUp{");
         sb.append(super.toString());
         sb.append("children=").append(children);
         sb.append(", origin=").append(origin);
