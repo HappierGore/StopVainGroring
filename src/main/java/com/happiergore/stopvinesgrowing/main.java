@@ -1,8 +1,10 @@
 package com.happiergore.stopvinesgrowing;
 
+import com.happiergore.stopvinesgrowing.SQLite.ImportData;
 import com.happiergore.stopvinesgrowing.Utils.ConsoleUtils;
 import com.happiergore.stopvinesgrowing.Utils.Metrics;
 import com.happiergore.stopvinesgrowing.Utils.Metrics.SingleLineChart;
+import com.happiergore.stopvinesgrowing.Utils.UpdateChecker;
 import com.happiergore.stopvinesgrowing.cmds.Commands;
 import com.happiergore.stopvinesgrowing.cmds.argsComplete;
 import com.happiergore.stopvinesgrowing.data.VineJBDC;
@@ -29,6 +31,7 @@ public class main extends JavaPlugin implements Listener {
     public static ConsoleUtils console;
     private String sversion;
     public Metrics metrics;
+    public UpdateChecker updateChecker;
 
     public static FileConfiguration configYML;
 
@@ -38,17 +41,20 @@ public class main extends JavaPlugin implements Listener {
         configYML = getConfig();
         console = new ConsoleUtils();
         debugMode = getConfig().getBoolean("debug_mode");
+        updateChecker = new UpdateChecker(100948);
 
         //Cargar data
         VineJBDC.setYAMLPath(getDataFolder().getAbsolutePath());
         VineJBDC.load();
 
+        setupManager();
+
         //Metrics
         int pluginId = 15538; // <-- Replace with the id of your plugin!
         metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new SingleLineChart("total_vines_blocked", VineJBDC.vineMDownSaved::size));
-
-        setupManager();
+        metrics.addCustomChart(new SingleLineChart("total_vines_blocked", ()
+                -> VineJBDC.vineMDownSaved.size() + VineJBDC.vineMUpSaved.size()
+        ));
 
         registerCommands();
 
@@ -107,6 +113,27 @@ public class main extends JavaPlugin implements Listener {
             msg.add("&9Up: &a" + OnVineGrowing.materialsUP.toString());
             msg.add("&9Down: &a" + OnVineGrowing.materialsDown.toString());
         }
+
+        msg.add("");
+
+        switch (updateChecker.getUpdateCheckResult()) {
+            case OUT_DATED:
+                msg.add("&6There's a new update available:");
+                msg.add("&9New Version: &a" + updateChecker.latestVersion);
+                msg.add("&9Your version is: &c" + updateChecker.currentVersion);
+                msg.add("&eDownload it here: " + "&r\n&ahttps://www.spigotmc.org/resources/stop-vine-growing.100948/");
+                break;
+            case UNRELEASED:
+                msg.add("&6Your'e using beta / unreleased version: " + updateChecker.currentVersion);
+                msg.add("&eThe latest version released is: &a" + updateChecker.latestVersion);
+                break;
+            case UP_TO_DATE:
+                msg.add("&eYour'e using the latest version: &a" + updateChecker.currentVersion);
+                break;
+            case NO_RESULT:
+                msg.add("&cThere was an error when trying to get the versions. Skipping...");
+        }
+
         console.loggerMsg(msg);
     }
 
@@ -118,7 +145,14 @@ public class main extends JavaPlugin implements Listener {
             console.warnMsg(this.getName() + " wasn't able to get your client version.\nWill start with default version...");
             sversion = "v1_19";
         }
+
+        if (!ImportData.initialize()) {
+            console.warnMsg("&6We cannot import your data to the newest format.");
+            return false;
+        }
+
         successMessage(sversion);
+
         return true;
     }
 }

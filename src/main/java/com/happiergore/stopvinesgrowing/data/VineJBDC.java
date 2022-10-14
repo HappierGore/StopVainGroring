@@ -21,9 +21,6 @@ public class VineJBDC {
     public static boolean load() {
         try {
             vineYAML.getList("vines").getEntries().forEach(entry -> {
-                if (main.debugMode) {
-                    main.console.infoMsg("Entry:\n" + entry);
-                }
                 try {
                     vineMDownSaved.add((ParentMDown) Serializers.deserialize(entry));
                 } catch (Exception e) {

@@ -30,12 +30,27 @@ public class OnVineGrowing {
     private static final Set<Player> data = new HashSet<>();
     public static final Set materialsUP = new HashSet<String>() {
         {
-            addAll(main.configYML.getStringList("GrowsUp"));
+            try {
+                addAll(main.configYML.getStringList("GrowsUp"));
+            } catch (Exception e) {
+                console.warnMsg("&6There's no items up configurated in config.yml. Using defult (1.19 items)");
+                add("CAVE_VINES_PLANT");
+                add("CAVE_VINES");
+                add("VINE");
+            }
         }
     };
     public static final Set materialsDown = new HashSet<String>() {
         {
-            addAll(main.configYML.getStringList("GrowsDown"));
+            try {
+                addAll(main.configYML.getStringList("GrowsDown"));
+            } catch (Exception e) {
+                console.warnMsg("&6There's no items down configurated in config.yml. Using defult (1.19 items)");
+                add("BAMBOO");
+                add("BAMBOO_SAPLING");
+                add("TWISTING_VINES");
+                add("CACTUS");
+            }
         }
     };
     public final static Set materials = new HashSet<String>() {
