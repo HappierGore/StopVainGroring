@@ -2,6 +2,7 @@ package com.happiergore.stopvinesgrowing.data;
 
 import com.happiergore.stopvinesgrowing.Utils.Serializers;
 import com.happiergore.stopvinesgrowing.Utils.YAML.YamlJBDC;
+import com.happiergore.stopvinesgrowing.events.OnVineGrowing;
 import com.happiergore.stopvinesgrowing.main;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,8 @@ public class VineJBDC {
         ParentMDown parentToSave = parentVine;
 
         for (ParentMDown parent : vineMDownSaved) {
-            if (parent.getLocation().distance(parentVine.getLocation()) == 0) {
+            if (OnVineGrowing.sameWorls(parent.getLocation(), parentVine.getLocation())
+                    && parent.getLocation().distance(parentVine.getLocation()) == 0) {
                 parentToSave = parent;
             }
         }
@@ -93,7 +95,8 @@ public class VineJBDC {
         boolean result = false;
 
         for (ParentMDown parent : vineMDownSaved) {
-            if (parent.getLocation().distance(parentVine.getLocation()) == 0) {
+            if (OnVineGrowing.sameWorls(parent.getLocation(), parentVine.getLocation())
+                    && parent.getLocation().distance(parentVine.getLocation()) == 0) {
                 parentToRemove = parent;
             }
         }
@@ -133,7 +136,8 @@ public class VineJBDC {
         ParentMUp parentToSave = parentVine;
 
         for (ParentMUp parent : vineMUpSaved) {
-            if (parent.getLocation().distance(parentVine.getLocation()) == 0) {
+            if (OnVineGrowing.sameWorls(parent.getLocation(), parentVine.getLocation())
+                    && parent.getLocation().distance(parentVine.getLocation()) == 0) {
                 parentToSave = parent;
             }
         }
@@ -170,7 +174,8 @@ public class VineJBDC {
         boolean result = false;
 
         for (ParentMUp parent : vineMUpSaved) {
-            if (parent.getLocation().distance(parentVine.getLocation()) == 0) {
+            if (OnVineGrowing.sameWorls(parent.getLocation(), parentVine.getLocation())
+                    && parent.getLocation().distance(parentVine.getLocation()) == 0) {
                 parentToRemove = parent;
             }
         }

@@ -61,6 +61,10 @@ public class OnVineGrowing {
         }
     };
 
+    public static boolean sameWorls(Location loc1, Location loc2) {
+        return loc1.getWorld().getName().equalsIgnoreCase(loc2.getWorld().getName());
+    }
+
     private static boolean isChild(ChildM child) {
         if (debugMode) {
             console.infoMsg("&6Child to check:&r\n" + child.toString());
@@ -70,6 +74,12 @@ public class OnVineGrowing {
             for (ChildM childSaved : VineJBDC.childMSaved) {
                 if (debugMode) {
                     console.infoMsg("&eChild information:&r\n" + childSaved.toString());
+                }
+                if (!sameWorls(child.getLocation(), childSaved.getLocation())) {
+                    if (debugMode) {
+                        console.infoMsg("Both child are from different worlds, skipping it...");
+                    }
+                    continue;
                 }
                 if (childSaved.getLocation().distance(child.getLocation()) == 0) {
                     if (debugMode) {
@@ -81,6 +91,12 @@ public class OnVineGrowing {
             }
             //Prevent by parents
             for (ParentMDown parent : VineJBDC.vineMDownSaved) {
+                if (!sameWorls(parent.getLocation(), child.getLocation())) {
+                    if (debugMode) {
+                        console.infoMsg("Both child and parent are from different worlds, skipping it...");
+                    }
+                    continue;
+                }
                 if (parent.getLocation().distance(child.getLocation()) == 0) {
                     if (debugMode) {
                         console.infoMsg("&aThere was a parent vine trying to grow. It was prevented."
@@ -94,6 +110,12 @@ public class OnVineGrowing {
             for (ParentMUp parent : VineJBDC.vineMUpSaved) {
                 if (debugMode) {
                     console.infoMsg("&eParent material:&r\n" + parent.toString());
+                }
+                if (!sameWorls(child.getLocation(), parent.getLocation())) {
+                    if (debugMode) {
+                        console.infoMsg("Both child and parent are from different worlds, skipping it...");
+                    }
+                    continue;
                 }
                 if (parent.getLocation().distance(child.getLocation()) == 0) {
                     if (debugMode) {
@@ -148,6 +170,12 @@ public class OnVineGrowing {
                 console.infoMsg("A material" + brokenBlock.getType().toString() + " has been broken.");
             }
             for (ParentMDown parent : VineJBDC.vineMDownSaved) {
+                if (!sameWorls(parent.getLocation(), origin)) {
+                    if (debugMode) {
+                        console.infoMsg("Both parents are from different worlds, skipping it...");
+                    }
+                    continue;
+                }
                 if (parent.getLocation().distance(origin) == 0) {
                     if (debugMode) {
                         console.infoMsg("&6A parent material witch grows down has been broken.");
@@ -164,6 +192,12 @@ public class OnVineGrowing {
             }
 
             for (ParentMUp parent : VineJBDC.vineMUpSaved) {
+                if (!sameWorls(parent.getLocation(), origin)) {
+                    if (debugMode) {
+                        console.infoMsg("Both parents are from different worlds, skipping it...");
+                    }
+                    continue;
+                }
                 if (parent.getLocation().distance(origin) == 0) {
                     if (debugMode) {
                         console.infoMsg("&6A parent material witch grows down has been broken.");
